@@ -1,22 +1,40 @@
+// 设置页面路由
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
+import Goods from '../views/goods/goods.vue'//商品组件
+import Ratings from '../views/ratings/ratings.vue'//评论组件
+import Seller from '../views/seller/seller.vue'//商家信息组件
+import NotFound from '../views/404/404.vue';
+
 
 Vue.use(VueRouter)
 
   const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'goods',
+    component: Goods
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/goods',
+    name: 'goods',
+    component:Goods
+  },
+  {
+    path:'/ratings',
+    name:'ratings',
+    component:Ratings
+  },
+  {
+    path:"/seller",
+    name:"seller",
+    component:Seller
+  },
+  {
+    path:"*",
+    name:"notfound",
+    component:NotFound
   }
 ]
 

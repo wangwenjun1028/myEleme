@@ -1,0 +1,71 @@
+
+.goods{
+   height: 100%;
+   padding-bottom: 48px;
+   box-sizing: border-box;
+}
+.goods-tab{
+    float: left; 
+    width: 80px;
+    height: 100%;
+    overflow: scroll;
+    li{
+        position: relative;
+        font-size: 12px;
+        font-weight: 200;
+        padding: 16px 12px;
+        line-height: 14px;
+        background: #f3f5f7;
+        // border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+    }
+    li.active{
+        background: #ffffff;
+        font-weight: bold;
+    }
+    
+    li:not(:first-child)::after{
+      content: '';
+      display: block;
+      position: absolute;  
+      left: 50%;
+      top: 0;
+      width: 56px;
+      height: 1px;
+      background:rgba(7, 17, 27, 0.1) ;
+      transform: translateX(-50%);
+    }
+    li:last-child::before{
+        content: '';
+      display: block;
+      position: absolute;  
+      left: 50%;
+      bottom: 0;
+      width: 56px;
+      height: 1px;
+      background:rgba(7, 17, 27, 0.1) ;
+      transform: translateX(-50%);
+    }
+    li.active::after{
+        background:initial;  
+    }
+    li.active::after,li.active+li::after,li.active::before{
+        background: initial;
+    }
+}
+// .goods-tab::-webkit-scrollbar{
+//     width: 0;
+// }
+.goods-list{
+    overflow: hidden;
+}
+
+// 购物车
+.shoppingCart{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+    height: 48px;
+    background: black;
+}
