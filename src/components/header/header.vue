@@ -62,7 +62,7 @@ export default {
     },
     props:['seller'],
     created () {
-        console.log(this.seller)
+        // console.log(this.seller)
     },
     methods: {
         alertShow(){
