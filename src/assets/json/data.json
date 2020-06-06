@@ -401,6 +401,7 @@
       },
       {
         "name": "单人精彩套餐",
+        "pic":"assets/image/goods/discount_3@2x.png",
         "type": 2,
         "foods": [
           {
@@ -428,6 +429,7 @@
       {
         "name": "冰爽饮品限时特惠",
         "type": 1,
+        "pic":"assets/image/goods/special_3@2x.png",
         "foods": [
           {
             "name": "VC无限橙果汁",
