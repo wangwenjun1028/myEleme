@@ -1,11 +1,18 @@
 <template>
   <div class="goodProduct">
     <ul class="food-infos">
-      <ul>
-        <img src alt />
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
+      <img :src="img" alt width="57" />
+      <ul class="food-content">
+        <li class="title">皮蛋瘦肉粥</li>
+        <li class="describtion">咸粥</li>
+        <li class="sell">
+          <span>月售229份</span>
+          <span class="good-rating">好评率100%</span>
+        </li>
+        <li class="price">
+          <span class="now-price">￥10</span>
+          <span class="old-price">￥26</span>
+        </li>
       </ul>
     </ul>
     <div class="food-button"></div>
@@ -14,7 +21,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      img: require("./img/food1.jpeg")
+    };
   }
 };
 </script>
