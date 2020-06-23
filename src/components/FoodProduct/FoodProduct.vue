@@ -15,15 +15,34 @@
         </li>
       </ul>
     </ul>
-    <div class="food-button"></div>
+    <div class="food-button">
+      <span v-if="count>0" @click="handleDecreace" class="iconfont decreace-icon icon"></span>
+      <span v-if="count>0" class="count">{{count}}</span>
+      <span @click="handleAdd" class="iconfont add-icon icon"></span>
+    </div>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      img: require("./img/food1.jpeg")
+      img: require("./img/food1.jpeg"),
+      count: 0
     };
+    s;
+  },
+  methods: {
+    handleAdd() {
+      //点击添加console.log(this.count)
+      this.count++;
+    },
+    handleDecreace() {
+      //点击减少
+      this.count--;
+      if (this.count <= 0) {
+        this.count = 0;
+      }
+    }
   }
 };
 </script>

@@ -1,5 +1,6 @@
 .goodProduct{
     padding: 18px 0;
+    position: relative;
 }
 .food-infos{
     display: flex;
@@ -32,5 +33,32 @@
         text-decoration: line-through;
         font-size: 10px;
         margin-left: 8px;
+    }
+}
+
+.food-button{
+    position: absolute;
+    right: 0px;
+    bottom: 18px;
+   
+    .icon{
+        padding: 6px;
+        font-size: 24px;
+        color: #00a0dc;
+    
+    }
+    .add-icon::before{
+        content: "\E622";
+    }
+    .decreace-icon::before{
+        content: "\E629";
+    }
+    .count{
+        vertical-align: top;
+        line-height: 24px;
+    }
+    .decreace-icon{
+        position: relative;
+        top: -1px;
     }
 }
