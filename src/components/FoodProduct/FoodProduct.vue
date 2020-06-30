@@ -1,22 +1,24 @@
 <template>
   <div class="goodProduct">
     <ul class="food-infos">
-      <img :src="img" alt width="57" />
+      <img :src="foodInfo.icon" alt width="57" />
       <ul class="food-content">
-        <li class="title">皮蛋瘦肉粥</li>
-        <li class="describtion">咸粥</li>
+        <li class="title">{{foodInfo.name}}</li>
+        <li class="describtion">{{foodInfo.describtion}}</li>
         <li class="sell">
-          <span>月售229份</span>
-          <span class="good-rating">好评率100%</span>
+          <span>月售{{foodInfo.sellCount}}份</span>
+          <span class="good-rating">好评率{{foodInfo.rating}}%</span>
         </li>
         <li class="price">
-          <span class="now-price">￥10</span>
-          <span class="old-price">￥26</span>
+          <span class="now-price">￥{{foodInfo.price}}</span>
+          <span v-if="foodInfo.oldPrice" class="old-price">￥{{foodInfo.oldPrice}}</span>
         </li>
       </ul>
     </ul>
     <div class="food-button">
-      <span v-if="count>0" @click="handleDecreace" class="iconfont decreace-icon icon"></span>
+      <transition name="fade">
+        <span v-if="count>0" @click="handleDecreace" class="iconfont decreace-icon icon"></span>
+      </transition>
       <span v-if="count>0" class="count">{{count}}</span>
       <span @click="handleAdd" class="iconfont add-icon icon"></span>
     </div>
@@ -31,6 +33,10 @@ export default {
     };
     s;
   },
+  mounted() {
+    // console.log(this.foodInfo);
+  },
+  props: ["foodInfo"],
   methods: {
     handleAdd() {
       //点击添加console.log(this.count)

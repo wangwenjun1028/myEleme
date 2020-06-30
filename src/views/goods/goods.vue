@@ -4,8 +4,8 @@
       <li
         v-for="(p,i) of dataList"
         :key="i"
-        :class="tabSelectIndex==i?'active':''"
-        @click="handleTabClick(i)"
+        :class="{'active':tabSelectIndex===i}"
+        @click="handleTabClick(i,$event)"
       >
         <img v-if="p.type!=-1" :src="require('../../'+p.pic)" alt="#" />
         <span>{{p.name}}</span>
@@ -15,10 +15,9 @@
       <li class="goods-type" v-for="(p,i) of dataList" :key="i">
         <h1 class="type-title">{{p.name}}</h1>
         <ul>
-          <li>
-            <food-product></food-product>
+          <li v-for="(item,index) of p.foods" :key="index">
+            <food-product :foodInfo="item"></food-product>
           </li>
-          <li v-for="(item,index) of p.foods" :key="index">{{item.name}}</li>
         </ul>
       </li>
     </ul>
@@ -45,8 +44,15 @@ export default {
     let lous = document.getElementsByClassName("goods-list")[0].children;
     lous.forEach(element => {});
   },
+  watch: {
+    tabSelectIndex() {}
+  },
   methods: {
-    handleTabClick(i) {
+    handleTabClick(i, event) {
+      // if (!event._constructed) {
+      //   // 去掉自带click事件的点击
+      //   return;
+      // }
       this.tabSelectIndex = i;
       let lous = document.getElementsByClassName("goods-list")[0].children;
       lous.forEach((elem, index) => {
@@ -65,8 +71,10 @@ export default {
         /**
          * element.offsetTop  表示相对父元素的高度，父元素要定位
          * **/
-        if (scrollHeight > element.offsetTop) {
-          this.tabSelectIndex = i;
+        if (scrollHeight >= element.offsetTop) {
+          if (this.tabSelectIndex != i) {
+            this.tabSelectIndex = i;
+          }
         }
       });
     }

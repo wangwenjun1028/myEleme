@@ -40,7 +40,9 @@
     position: absolute;
     right: 0px;
     bottom: 18px;
-   
+   span{
+       display: inline-block;
+   }
     .icon{
         padding: 6px;
         font-size: 24px;
@@ -55,10 +57,23 @@
     }
     .count{
         vertical-align: top;
-        line-height: 24px;
+        line-height: 36px;
     }
     .decreace-icon{
         position: relative;
-        top: -1px;
+        top: -2px;
     }
+}
+// 按钮点击过渡
+.fade-leave-active,.fade-enter-active{
+    transition: all .3s linear;
+}
+
+.fade-enter-to,.fade-leave{
+    opacity: 1;
+    transform: translateX(0);
+}
+.fade-enter,.fade-leave-to{
+    opacity: 0;
+    transform: translateX(20px);
 }
