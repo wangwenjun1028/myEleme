@@ -2,50 +2,54 @@
   <div class="goods">
     <ul class="goods-tab">
       <li
-        v-for="(p,i) of dataList"
+        v-for="(p, i) of dataList"
         :key="i"
-        :class="{'active':tabSelectIndex===i}"
-        @click="handleTabClick(i,$event)"
+        :class="{ active: tabSelectIndex === i }"
+        @click="handleTabClick(i, $event)"
       >
-        <img v-if="p.type!=-1" :src="require('../../'+p.pic)" alt="#" />
-        <span>{{p.name}}</span>
+        <img v-if="p.type != -1" :src="require('../../' + p.pic)" alt="#" />
+        <span>{{ p.name }}</span>
       </li>
     </ul>
     <ul class="goods-list" @scroll="handleScroll">
-      <li class="goods-type" v-for="(p,i) of dataList" :key="i">
-        <h1 class="type-title">{{p.name}}</h1>
+      <li class="goods-type" v-for="(p, i) of dataList" :key="i">
+        <h1 class="type-title">{{ p.name }}</h1>
         <ul>
-          <li v-for="(item,index) of p.foods" :key="index">
+          <li v-for="(item, index) of p.foods" :key="index">
             <food-product :foodInfo="item"></food-product>
           </li>
         </ul>
       </li>
     </ul>
     <!-- 购物车 -->
-    <div class="shoppingCart"></div>
+    <div class="shoppingCart">
+      <shopping></shopping>
+    </div>
   </div>
 </template>
 <script>
 import FoodProduct from "../../components/FoodProduct/FoodProduct";
+import Shopping from "../../components/Shopping/Shopping"; //购物车组件
 import dataSource from "../../assets/json/data.json";
 export default {
   data() {
     return {
       img: "assets/image/goods/discount_3@2x.png",
       dataList: [],
-      tabSelectIndex: 0 //左侧tab选中的下标
+      tabSelectIndex: 0, //左侧tab选中的下标
     };
   },
   components: {
-    FoodProduct
+    FoodProduct,
+    Shopping,
   },
   mounted() {
     this.dataList = dataSource.goods;
     let lous = document.getElementsByClassName("goods-list")[0].children;
-    lous.forEach(element => {});
+    lous.forEach((element) => {});
   },
   watch: {
-    tabSelectIndex() {}
+    tabSelectIndex() {},
   },
   methods: {
     handleTabClick(i, event) {
@@ -77,8 +81,8 @@ export default {
           }
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

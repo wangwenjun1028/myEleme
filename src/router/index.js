@@ -5,12 +5,12 @@ import VueRouter from 'vue-router'
 import Goods from '../views/goods/goods.vue'//商品组件
 import Ratings from '../views/ratings/ratings.vue'//评论组件
 import Seller from '../views/seller/seller.vue'//商家信息组件
-import NotFound from '../views/404/404.vue';
+import NotFound from '../views/404/404.vue';//404页面
 
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'goods',
@@ -19,22 +19,22 @@ Vue.use(VueRouter)
   {
     path: '/goods',
     name: 'goods',
-    component:Goods
+    component: Goods
   },
   {
-    path:'/ratings',
-    name:'ratings',
-    component:Ratings
+    path: '/ratings',
+    name: 'ratings',
+    component: Ratings
   },
   {
-    path:"/seller",
-    name:"seller",
-    component:Seller
+    path: "/seller",
+    name: "seller",
+    component: Seller
   },
   {
-    path:"*",
-    name:"notfound",
-    component:NotFound
+    path: "*",
+    name: "notfound",
+    component: NotFound
   }
 ]
 
