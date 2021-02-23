@@ -16,14 +16,17 @@
         <h1 class="type-title">{{ p.name }}</h1>
         <ul>
           <li v-for="(item, index) of p.foods" :key="index">
-            <food-product :foodInfo="item"></food-product>
+            <food-product
+              :foodInfo="item"
+              @addCount="handleAddCount"
+            ></food-product>
           </li>
         </ul>
       </li>
     </ul>
     <!-- 购物车 -->
     <div class="shoppingCart">
-      <shopping></shopping>
+      <shopping :dataList="dataList"></shopping>
     </div>
   </div>
 </template>
@@ -31,6 +34,7 @@
 import FoodProduct from "../../components/FoodProduct/FoodProduct";
 import Shopping from "../../components/Shopping/Shopping"; //购物车组件
 import dataSource from "../../assets/json/data.json";
+import fetchData, { fatchData } from "../../services/fatchData";
 export default {
   data() {
     return {
@@ -44,7 +48,10 @@ export default {
     Shopping,
   },
   mounted() {
-    this.dataList = dataSource.goods;
+    //  let dataList = dataSource.goods;
+
+    this.dataList = fatchData(); //获取数据
+
     let lous = document.getElementsByClassName("goods-list")[0].children;
     lous.forEach((element) => {});
   },
@@ -81,6 +88,34 @@ export default {
           }
         }
       });
+    },
+    // 添加购买数量
+    handleAddCount(sid, count) {
+      let dataList = [...this.dataList];
+      dataList.map((p, i) => {
+        p.foods.map((key, index) => {
+          // let foodItem = { ...key };
+          if (key.sid === sid) {
+            // foodItem.count = count;
+            dataList[i].foods[index].count = count;
+          }
+        });
+      });
+      this.dataList = dataList;
+    },
+    getShoppingCartData(data) {
+      let newData = [];
+      data.map((item) => {
+        item.foods.map((p) => {
+          for (var key of p) {
+            if (key.count) {
+              newData.push(...key);
+            }
+          }
+        });
+      });
+      console.log(newData);
+      return newData;
     },
   },
 };

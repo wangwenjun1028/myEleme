@@ -38,14 +38,14 @@ export default {
       count: 0,
     };
   },
-  mounted() {
-    // console.log(this.foodInfo);
-  },
+  mounted() {},
   props: ["foodInfo"],
   methods: {
     handleAdd() {
       //点击添加console.log(this.count)
       this.count++;
+      // this.props.count = count;
+      this.$emit("addCount", this.foodInfo.sid, this.count);
     },
     handleDecreace() {
       //点击减少
@@ -53,6 +53,8 @@ export default {
       if (this.count <= 0) {
         this.count = 0;
       }
+      // this.props.count = count;
+      this.$emit("addCount", this.foodInfo.sid, this.count);
     },
   },
 };
