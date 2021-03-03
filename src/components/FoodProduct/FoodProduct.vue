@@ -42,7 +42,6 @@ export default {
   watch: {
     foodInfo: {
       handler(newVal) {
-        console.log("数据发生改变了");
         this.count = newVal.count;
       },
       deep: true,
