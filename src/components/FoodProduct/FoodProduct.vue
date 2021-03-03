@@ -20,13 +20,13 @@
     <div class="food-button">
       <transition name="fade">
         <span
-          v-if="count > 0"
-          @click="handleDecreace"
+          v-if="foodInfo.count > 0"
+          @click.stop="handleDecreace"
           class="iconfont decreace-icon icon"
         ></span>
       </transition>
-      <span v-if="count > 0" class="count">{{ count }}</span>
-      <span @click="handleAdd" class="iconfont add-icon icon"></span>
+      <span v-if="foodInfo.count > 0" class="count">{{ foodInfo.count }}</span>
+      <span @click.stop="handleAdd" class="iconfont add-icon icon"></span>
     </div>
   </div>
 </template>
@@ -35,10 +35,19 @@ export default {
   data() {
     return {
       img: require("./img/food1.jpeg"),
-      count: 0,
+      count: this.foodInfo.count,
     };
   },
   mounted() {},
+  watch: {
+    foodInfo: {
+      handler(newVal) {
+        console.log("数据发生改变了");
+        this.count = newVal.count;
+      },
+      deep: true,
+    },
+  },
   props: ["foodInfo"],
   methods: {
     handleAdd() {

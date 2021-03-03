@@ -12,7 +12,12 @@
       </li>
     </ul>
     <ul class="goods-list" @scroll="handleScroll">
-      <li class="goods-type" v-for="(p, i) of dataList" :key="i">
+      <li
+        class="goods-type"
+        v-for="(p, i) of dataList"
+        :key="i"
+        @click="toggleFoodDetailShow"
+      >
         <h1 class="type-title">{{ p.name }}</h1>
         <ul>
           <li v-for="(item, index) of p.foods" :key="index">
@@ -26,8 +31,17 @@
     </ul>
     <!-- 购物车 -->
     <div class="shoppingCart">
-      <shopping :dataList="dataList"></shopping>
+      <shopping
+        :dataList="dataList"
+        @changeCount="handleChangeCount"
+        @clearAllCount="handleClearAllCount"
+      ></shopping>
     </div>
+
+    <!-- 食物详情 -->
+    <transition name="foodDetail">
+      <div class="food-details" v-if="isFoodDetailsShow"></div>
+    </transition>
   </div>
 </template>
 <script>
@@ -41,6 +55,7 @@ export default {
       img: "assets/image/goods/discount_3@2x.png",
       dataList: [],
       tabSelectIndex: 0, //左侧tab选中的下标
+      isFoodDetailsShow: false, //食物详情
     };
   },
   components: {
@@ -91,6 +106,7 @@ export default {
     },
     // 添加购买数量
     handleAddCount(sid, count) {
+      console.log(count);
       let dataList = [...this.dataList];
       dataList.map((p, i) => {
         p.foods.map((key, index) => {
@@ -101,21 +117,58 @@ export default {
           }
         });
       });
-      this.dataList = dataList;
+      this.dataList = [...dataList];
     },
-    getShoppingCartData(data) {
-      let newData = [];
-      data.map((item) => {
-        item.foods.map((p) => {
-          for (var key of p) {
-            if (key.count) {
-              newData.push(...key);
+    // getShoppingCartData(data) {
+    //   let newData = [];
+    //   data.map((item) => {
+    //     item.foods.map((p) => {
+    //       for (var key of p) {
+    //         if (key.count) {
+    //           newData.push(...key);
+    //         }
+    //       }
+    //     });
+    //   });
+    //   return newData;
+    // },
+
+    // 处理购物车的数量加减
+    handleChangeCount(sid, type) {
+      console.log(sid, type);
+      let dataList = [...this.dataList];
+      dataList.map((p, i) => {
+        p.foods.map((key, index) => {
+          // let foodItem = { ...key };
+          if (key.sid === sid) {
+            // foodItem.count = count;
+            if (type === "add") {
+              dataList[i].foods[index].count += 1;
+            }
+            if (type === "reduce") {
+              dataList[i].foods[index].count -= 1;
             }
           }
         });
       });
-      console.log(newData);
-      return newData;
+      this.dataList = [...dataList];
+    },
+    //清空购物车数量
+    handleClearAllCount() {
+      let dataList = [...this.dataList];
+      dataList.map((p, i) => {
+        p.foods.map((key, index) => {
+          if (key.count) {
+            dataList[i].foods[index].count = 0;
+          }
+        });
+      });
+      this.dataList = [...dataList];
+    },
+
+    // 是否显示食物详情
+    toggleFoodDetailShow() {
+      this.isFoodDetailsShow = !this.isFoodDetailsShow;
     },
   },
 };

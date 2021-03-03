@@ -10,7 +10,8 @@ export function fatchData() {
             num++;
             let obj = { ...p };
             obj.sid = num;
-            dataList[index].foods[i] = obj;
+            obj.count = 0;
+            dataList[index].foods[i] = { ...obj };
         })
     })
     return dataList;

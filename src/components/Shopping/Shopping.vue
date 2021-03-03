@@ -26,15 +26,21 @@
 
     <!--蒙层 -->
     <transition name="mask">
-      <div v-if="isShowShoppingList" class="shopping-mask"></div>
+      <div
+        v-if="isShowShoppingList && shoppingList.length"
+        class="shopping-mask"
+      ></div>
     </transition>
 
     <!--购物车列表 -->
     <transition name="list">
-      <div v-if="isShowShoppingList" class="shopping-list">
+      <div
+        v-if="isShowShoppingList && shoppingList.length"
+        class="shopping-list"
+      >
         <div class="list-head">
           <div class="head-left">购物车</div>
-          <div class="head-right">清空</div>
+          <div class="head-right" @click="doClear">清空</div>
         </div>
         <ul class="list-container">
           <li v-for="p of shoppingList" :key="p.sid" class="list-item">
@@ -42,9 +48,15 @@
             <div class="list-item-right">
               <div class="item-price">{{ p.count * p.price }}</div>
               <div class="item-btn">
-                <i class="el-icon-remove-outline"></i>
+                <i
+                  class="el-icon-remove-outline"
+                  @click="$emit('changeCount', p.sid, 'reduce')"
+                ></i>
                 <span class="item-count">{{ p.count }}</span>
-                <i class="el-icon-circle-plus"></i>
+                <i
+                  @click="$emit('changeCount', p.sid, 'add')"
+                  class="el-icon-circle-plus"
+                ></i>
               </div>
             </div>
           </li>
@@ -108,7 +120,12 @@ export default {
     // 点击：购物车列表是否显示
     handleToggleShppingList() {
       this.isShowShoppingList = !this.isShowShoppingList;
-      console.log(this.shoppingList);
+      // console.log(this.shoppingList);
+      console.log(this.isShowShoppingList);
+    },
+    doClear() {
+      this.isShowShoppingList = !this.isShowShoppingList;
+      this.$emit("clearAllCount");
     },
   },
 };

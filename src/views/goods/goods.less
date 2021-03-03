@@ -96,3 +96,29 @@
     // height: 48px;
     // background: black;
 }
+
+// 食物详情
+
+  // 食物详情
+  .food-details {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 48px;
+    background: red;
+  }
+  .foodDetail-enter-active {
+    animation: food-in 0.5s;
+  }
+  .foodDetail-leave-active {
+    animation: food-in 0.5s reverse;
+  }
+  @keyframes food-in {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
