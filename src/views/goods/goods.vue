@@ -178,8 +178,6 @@ export default {
       this.isFoodDetailsShow = !this.isFoodDetailsShow;
       this.foodDetailData = { ...item };
       console.log(item);
-      console.log(666);
-      console.log(111);
     },
 
     // 食物详情页，点击返回
