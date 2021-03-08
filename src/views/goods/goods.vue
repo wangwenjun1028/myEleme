@@ -12,15 +12,14 @@
       </li>
     </ul>
     <ul class="goods-list" @scroll="handleScroll">
-      <li
-        class="goods-type"
-        v-for="(p, i) of dataList"
-        :key="i"
-        @click="toggleFoodDetailShow"
-      >
+      <li class="goods-type" v-for="(p, i) of dataList" :key="i">
         <h1 class="type-title">{{ p.name }}</h1>
         <ul>
-          <li v-for="(item, index) of p.foods" :key="index">
+          <li
+            v-for="(item, index) of p.foods"
+            @click="toggleFoodDetailShow(item)"
+            :key="index"
+          >
             <food-product
               :foodInfo="item"
               @addCount="handleAddCount"
@@ -40,13 +39,19 @@
 
     <!-- 食物详情 -->
     <transition name="foodDetail">
-      <div class="food-details" v-if="isFoodDetailsShow"></div>
+      <div class="food-details" v-if="isFoodDetailsShow">
+        <food-detail
+          @hideFoodDetail="handleHideFoodDetail"
+          :foodDetailData="foodDetailData"
+        ></food-detail>
+      </div>
     </transition>
   </div>
 </template>
 <script>
 import FoodProduct from "../../components/FoodProduct/FoodProduct";
 import Shopping from "../../components/Shopping/Shopping"; //购物车组件
+import FoodDetail from "../../components/FoodDetail/FoodDetail"; //食物详情组件
 import dataSource from "../../assets/json/data.json";
 import fetchData, { fatchData } from "../../services/fatchData";
 export default {
@@ -56,11 +61,13 @@ export default {
       dataList: [],
       tabSelectIndex: 0, //左侧tab选中的下标
       isFoodDetailsShow: false, //食物详情
+      foodDetailData: {}, //食物详情数据
     };
   },
   components: {
     FoodProduct,
     Shopping,
+    FoodDetail,
   },
   mounted() {
     //  let dataList = dataSource.goods;
@@ -167,8 +174,15 @@ export default {
     },
 
     // 是否显示食物详情
-    toggleFoodDetailShow() {
+    toggleFoodDetailShow(item) {
       this.isFoodDetailsShow = !this.isFoodDetailsShow;
+      this.foodDetailData = { ...item };
+      console.log(item);
+    },
+
+    // 食物详情页，点击返回
+    handleHideFoodDetail() {
+      this.isFoodDetailsShow = false;
     },
   },
 };
