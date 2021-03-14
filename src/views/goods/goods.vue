@@ -43,6 +43,7 @@
         <food-detail
           @hideFoodDetail="handleHideFoodDetail"
           :foodDetailData="foodDetailData"
+          @foodDetail="handleChangeCount"
         ></food-detail>
       </div>
     </transition>
@@ -113,7 +114,6 @@ export default {
     },
     // 添加购买数量
     handleAddCount(sid, count) {
-      console.log(count);
       let dataList = [...this.dataList];
       dataList.map((p, i) => {
         p.foods.map((key, index) => {
@@ -142,7 +142,6 @@ export default {
 
     // 处理购物车的数量加减
     handleChangeCount(sid, type) {
-      console.log(sid, type);
       let dataList = [...this.dataList];
       dataList.map((p, i) => {
         p.foods.map((key, index) => {
@@ -155,6 +154,7 @@ export default {
             if (type === "reduce") {
               dataList[i].foods[index].count -= 1;
             }
+            this.foodDetailData = dataList[i].foods[index];
           }
         });
       });
@@ -175,9 +175,9 @@ export default {
 
     // 是否显示食物详情
     toggleFoodDetailShow(item) {
+      console.log(item);
       this.isFoodDetailsShow = !this.isFoodDetailsShow;
       this.foodDetailData = { ...item };
-      console.log(item);
     },
 
     // 食物详情页，点击返回

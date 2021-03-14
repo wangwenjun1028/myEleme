@@ -14,17 +14,30 @@
           </p>
           <p class="price">
             <span class="now">￥{{ foodDetailData.price }}</span>
-            <span class="old">￥{{ foodDetailData.oldPrice }}</span>
+            <span v-if="foodDetailData.oldPrice" class="old"
+              >￥{{ foodDetailData.oldPrice }}</span
+            >
           </p>
         </div>
         <div class="item-count">
-          <div v-if="!count" class="btn-text">
-            <el-button type="primary" round>加入购物车</el-button>
+          <div v-if="!foodDetailData.count" class="btn-text">
+            <el-button
+              @click="$emit('foodDetail', foodDetailData.sid, 'add')"
+              type="primary"
+              round
+              >加入购物车</el-button
+            >
           </div>
-          <div v-if="count" class="btn-box">
-            <i class="el-icon-remove-outline"></i>
-            <span class="procuct-count">{{ count }}</span>
-            <i class="el-icon-circle-plus-outline"></i>
+          <div v-if="foodDetailData.count" class="btn-box">
+            <i
+              @click="$emit('foodDetail', foodDetailData.sid, 'reduce')"
+              class="el-icon-remove-outline"
+            ></i>
+            <span class="procuct-count">{{ foodDetailData.count }}</span>
+            <i
+              @click="$emit('foodDetail', foodDetailData.sid, 'add')"
+              class="el-icon-circle-plus-outline"
+            ></i>
           </div>
         </div>
       </div>
@@ -43,7 +56,8 @@
           :key="p.type"
           :class="p.slected ? 'active' : ''"
           :color="p.slected ? p.seclectColor : p.color"
-          >{{ p.type }}{{ p.ratings.length }}</el-tag
+          @click="handleTabClick(p.type)"
+          >{{ p.type }} {{ p.ratings.length }}</el-tag
         >
       </div>
     </div>
@@ -54,7 +68,7 @@
     <ul class="rating-lists">
       <li v-for="p of tabs" :key="p.name">
         <ul v-if="p.slected">
-          <li v-for="item of p.ratings" :key="item.rateTime">
+          <li v-for="item of p.ratings" :key="item.rateTime" class="rating-li">
             <div class="rateing-item" v-if="item.text">
               <div class="rating-text">
                 <p class="time">{{ item.rateTime }}</p>
@@ -62,6 +76,7 @@
               </div>
               <div class="rating-user">
                 {{ item.username }}
+                <img :src="item.avatar" :alt="item.username" />
               </div>
             </div>
           </li>
@@ -101,16 +116,43 @@ export default {
       ],
     };
   },
+  watch: {
+    foodDetailData: {
+      handler(newVal, oldVal) {
+        console.log(newVal);
+      },
+      deep: true,
+    },
+  },
   mounted() {
     this.foodDetailData.ratings.map((p) => {
       if (p.rateType === 0) {
-        this.tabs[0].ratings.push({ ...p });
-      } else if (p.rateType === 1) {
         this.tabs[1].ratings.push({ ...p });
       } else if (p.rateType === 1) {
         this.tabs[2].ratings.push({ ...p });
       }
+      this.tabs[0].ratings.push({ ...p });
     });
+  },
+  methods: {
+    handleTabClick(type) {
+      this.tabs.forEach((item) => {
+        if (item.type === type) {
+          item.slected = true;
+        } else {
+          item.slected = false;
+        }
+      });
+    },
+  },
+  computed: {
+    ratingTotalLength() {
+      let sum = 0;
+      this.tabs.map((item) => {
+        sum += item.ratings.length;
+      });
+      return sum;
+    },
   },
 };
 </script>
@@ -217,15 +259,25 @@ export default {
     vertical-align: middle;
   }
 }
+.rating-li {
+  padding: 18px;
+}
 .rateing-item {
   display: flex;
   justify-content: space-between;
-  padding: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(1, 17, 27, 0.1);
 }
 .time,
 .rating-user {
   color: #93999f;
   margin-bottom: 6px;
+  img {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+  }
 }
 </style>
 
