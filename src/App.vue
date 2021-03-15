@@ -7,12 +7,12 @@
     <!-- tab -->
     <ul class="tab">
       <li
-        v-for="(p,i) of tabList"
+        v-for="(p, i) of tabList"
         :key="i"
-        :class="p.currentSelect?'active':''"
+        :class="p.currentSelect ? 'active' : ''"
         @click="handleTabClick(i)"
       >
-        <span>{{p.name}}</span>
+        <span>{{ p.name }}</span>
       </li>
     </ul>
     <div class="details">
@@ -35,27 +35,27 @@ export default {
           path: "/goods",
           index: 0,
           name: "商品",
-          currentSelect: true
+          currentSelect: true,
         },
         {
           path: "/ratings",
           index: 1,
           name: "评论",
-          currentSelect: false
+          currentSelect: false,
         },
         {
           path: "/seller",
           index: 2,
           name: "商家",
-          currentSelect: false
-        }
-      ]
+          currentSelect: false,
+        },
+      ],
     };
   },
   methods: {
     handleTabClick(i) {
       let list = this.tabList;
-      list.map(elem => {
+      list.map((elem) => {
         if (i == elem.index) {
           elem.currentSelect = true;
           this.$router.replace(elem.path);
@@ -64,14 +64,14 @@ export default {
         }
       });
       this.tabList = list;
-    }
+    },
   },
   created() {
     this.dataSource = data;
   },
   components: {
-    "v-header": Header
-  }
+    "v-header": Header,
+  },
 };
 </script>
 
@@ -101,5 +101,6 @@ export default {
 .details {
   flex: 1;
   overflow: hidden;
+  overflow: auto;
 }
 </style>

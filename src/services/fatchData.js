@@ -1,6 +1,5 @@
 import data from './data';
 export function fatchData() {
-    console.log(999)
     let dataSorce = data;
     let dataList = dataSorce.goods;
     let num = 0;
@@ -15,4 +14,13 @@ export function fatchData() {
         })
     })
     return dataList;
+}
+
+export function sellerData() {
+    let dataSorce = { ...data };
+    return { ...dataSorce.seller };
+}
+export function ratingsData() {
+    let dataSorce = { ...data };
+    return [...dataSorce.ratings];
 }
