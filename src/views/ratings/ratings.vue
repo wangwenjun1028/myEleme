@@ -49,7 +49,7 @@
               <div class="rating-details">
                 <div class="name">
                   <div>{{ item.username }}</div>
-                  <div>{{ item.rateTime }}</div>
+                  <div class="time">{{ formateTime(item.rateTime) }}</div>
                 </div>
                 <div class="star-component">
                   <star :score="item.score" :size="10"></star>
@@ -129,10 +129,25 @@ export default {
         }
       });
     },
+    /**
+     * 时间转换
+     */
+    formateTime(time) {
+      let year = new Date(time).getFullYear();
+      let month = new Date(time).getMonth() + 1;
+      if (month < 10) {
+        month = "0" + month;
+      }
+      let data = new Date(time).getDate() + 1;
+      let hour = new Date(time).getHours();
+      let min = new Date(time).getMinutes();
+      let sec = new Date().getSeconds();
+      return `${year}-${month}-${data} ${hour}-${min}`;
+    },
   },
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .rating {
   overflow-y: auto;
 }
@@ -237,6 +252,9 @@ export default {
 .name {
   display: flex;
   justify-content: space-between;
+  .time {
+    color: #93999f;
+  }
 }
 .star-component {
   margin: 4px 0;
