@@ -1,82 +1,89 @@
 <template>
-  <div class="rating">
-    <div class="overview">
-      <div class="overview-left">
-        <p class="score">{{ seller.score }}</p>
-        <p class="title">综合评分</p>
-        <p class="rank">高于周边商家{{ seller.rankRate }}</p>
+  <div ref="wrapper" class="wrapper">
+    <div class="rating">
+      <div class="overview">
+        <div class="overview-left">
+          <p class="score">{{ seller.score }}</p>
+          <p class="title">综合评分</p>
+          <p class="rank">高于周边商家{{ seller.rankRate }}</p>
+        </div>
+        <div class="overview-right">
+          <div class="score-item">
+            <div>服务态度</div>
+            <star :score="seller.serviceScore" :size="12"></star>
+            <div class="score">{{ seller.serviceScore }}</div>
+          </div>
+          <div class="score-item">
+            <div>商品评分</div>
+            <star :score="seller.foodScore" :size="12"></star>
+            <div class="score">{{ seller.foodScore }}</div>
+          </div>
+          <div class="score-item">
+            <div>送达时间</div>
+            <div class="time">{{ seller.deliveryTime }}分钟</div>
+          </div>
+        </div>
       </div>
-      <div class="overview-right">
-        <div class="score-item">
-          <div>服务态度</div>
-          <star :score="seller.serviceScore" :size="12"></star>
-          <div class="score">{{ seller.serviceScore }}</div>
-        </div>
-        <div class="score-item">
-          <div>商品评分</div>
-          <star :score="seller.foodScore" :size="12"></star>
-          <div class="score">{{ seller.foodScore }}</div>
-        </div>
-        <div class="score-item">
-          <div>送达时间</div>
-          <div class="time">{{ seller.deliveryTime }}分钟</div>
-        </div>
+      <div class="split"></div>
+      <div class="product-ratings">
+        <el-tag
+          v-for="p of tabs"
+          :key="p.type"
+          :class="p.slected ? 'active' : ''"
+          :color="p.slected ? p.seclectColor : p.color"
+          @click="handleTabClick(p.type)"
+          >{{ p.type }} {{ p.ratings.length }}</el-tag
+        >
       </div>
-    </div>
-    <div class="split"></div>
-    <div class="product-ratings">
-      <el-tag
-        v-for="p of tabs"
-        :key="p.type"
-        :class="p.slected ? 'active' : ''"
-        :color="p.slected ? p.seclectColor : p.color"
-        @click="handleTabClick(p.type)"
-        >{{ p.type }} {{ p.ratings.length }}</el-tag
-      >
-    </div>
-    <div class="rating-tip">
-      <i class="el-icon-circle-check"></i>
-      只看有内容的评价
-    </div>
-    <ul class="rating-lists">
-      <li v-for="p of tabs" :key="p.name">
-        <ul v-if="p.slected">
-          <li v-for="item of p.ratings" :key="item.rateTime" class="rating-li">
-            <div>
-              <div class="avatar">
-                <img :src="item.avatar" :alt="item.username" />
-              </div>
-              <div class="rating-details">
-                <div class="name">
-                  <div>{{ item.username }}</div>
-                  <div class="time">{{ formateTime(item.rateTime) }}</div>
+      <div class="rating-tip">
+        <i class="el-icon-circle-check"></i>
+        只看有内容的评价
+      </div>
+      <ul class="rating-lists">
+        <li v-for="p of tabs" :key="p.name">
+          <ul v-if="p.slected">
+            <li
+              v-for="item of p.ratings"
+              :key="item.rateTime"
+              class="rating-li"
+            >
+              <div>
+                <div class="avatar">
+                  <img :src="item.avatar" :alt="item.username" />
                 </div>
-                <div class="star-component">
-                  <star :score="item.score" :size="10"></star>
-                  <span class="deliveryTime">{{ item.deliveryTime }}</span>
-                </div>
-                <div class="support">
-                  <span v-for="name of item.recommend" :key="name">{{
-                    name
-                  }}</span>
+                <div class="rating-details">
+                  <div class="name">
+                    <div>{{ item.username }}</div>
+                    <div class="time">{{ formateTime(item.rateTime) }}</div>
+                  </div>
+                  <div class="star-component">
+                    <star :score="item.score" :size="10"></star>
+                    <span class="deliveryTime">{{ item.deliveryTime }}</span>
+                  </div>
+                  <div class="support">
+                    <span v-for="name of item.recommend" :key="name">{{
+                      name
+                    }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-        </ul>
-      </li>
-    </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
 import { sellerData, ratingsData } from "../../services/fatchData";
 import Star from "../../components/star/star.vue";
+import BScroll from "better-scroll";
 
 export default {
   data() {
     return {
-      seller: null,
-      ratings: null,
+      seller: {},
+      ratings: [],
       tabs: [
         {
           color: "rgba(0,160,220,.2)",
@@ -105,7 +112,7 @@ export default {
   components: {
     Star,
   },
-  mounted() {
+  created() {
     this.seller = { ...sellerData() };
     this.ratings = [...ratingsData()];
     console.log(this.ratings);
@@ -118,6 +125,9 @@ export default {
       }
       this.tabs[0].ratings.push({ ...p });
     });
+  },
+  mounted() {
+    new BScroll(this.$refs.wrapper, { click: true });
   },
   methods: {
     handleTabClick(type) {
@@ -148,6 +158,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.wrapper {
+  height: 100%;
+  overflow: hidden;
+}
 .rating {
   overflow-y: auto;
 }
@@ -181,7 +195,7 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   .star {
-    span {
+    /deep/ span {
       width: 15px;
       height: 15px;
       margin-right: 4px;
@@ -263,9 +277,10 @@ export default {
 .star-component .star {
   float: left;
 }
-.star-component .star span {
+.star-component .star /deep/ span {
   width: 10px;
   height: 10px;
+  margin-right: 3px;
 }
 .deliveryTime {
   float: left;

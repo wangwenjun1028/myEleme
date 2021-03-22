@@ -11,23 +11,25 @@
         <span>{{ p.name }}</span>
       </li>
     </ul>
-    <ul class="goods-list" @scroll="handleScroll">
-      <li class="goods-type" v-for="(p, i) of dataList" :key="i">
-        <h1 class="type-title">{{ p.name }}</h1>
-        <ul>
-          <li
-            v-for="(item, index) of p.foods"
-            @click="toggleFoodDetailShow(item)"
-            :key="index"
-          >
-            <food-product
-              :foodInfo="item"
-              @addCount="handleAddCount"
-            ></food-product>
-          </li>
-        </ul>
-      </li>
-    </ul>
+    <div class="food-wrapper" ref="foodWrapper">
+      <ul class="goods-list">
+        <li class="goods-type" v-for="(p, i) of dataList" :key="i">
+          <h1 class="type-title">{{ p.name }}</h1>
+          <ul>
+            <li
+              v-for="(item, index) of p.foods"
+              @click="toggleFoodDetailShow(item)"
+              :key="index"
+            >
+              <food-product
+                :foodInfo="item"
+                @addCount="handleAddCount"
+              ></food-product>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
     <!-- 购物车 -->
     <div class="shoppingCart">
       <shopping
@@ -55,6 +57,7 @@ import Shopping from "../../components/Shopping/Shopping"; //购物车组件
 import FoodDetail from "../../components/FoodDetail/FoodDetail"; //食物详情组件
 import dataSource from "../../assets/json/data.json";
 import fetchData, { fatchData } from "../../services/fatchData";
+import BScroll from "better-scroll"; //引入滚动插件better-scroll
 export default {
   data() {
     return {
@@ -75,13 +78,36 @@ export default {
 
     this.dataList = fatchData(); //获取数据
 
-    let lous = document.getElementsByClassName("goods-list")[0].children;
-    lous.forEach((element) => {});
+    // let lous = document.getElementsByClassName("goods-list")[0].children;
+    // lous.forEach((element) => {});
+    this.$nextTick(() => {
+      this._initScroll();
+    });
   },
   watch: {
     tabSelectIndex() {},
   },
   methods: {
+    _initScroll() {
+      console.log(this.$refs.foodWrapper);
+      let lous = document.getElementsByClassName("goods-list")[0].children;
+      this.food = new BScroll(this.$refs.foodWrapper, {
+        click: true,
+        probeType: 3,
+      });
+      this.food.on("scroll", (pbs) => {
+        let sHeight = pbs.y;
+        lous.forEach((elem, index) => {
+          let elemHeight = elem.offsetTop; //元素相对于父元素的高度
+          if (-sHeight >= elemHeight) {
+            if (this.tabSelectIndex != index) {
+              this.tabSelectIndex = index;
+            }
+            return false;
+          }
+        });
+      });
+    },
     handleTabClick(i, event) {
       // if (!event._constructed) {
       //   // 去掉自带click事件的点击
@@ -89,12 +115,13 @@ export default {
       // }
       this.tabSelectIndex = i;
       let lous = document.getElementsByClassName("goods-list")[0].children;
-      lous.forEach((elem, index) => {
-        if (i == index) {
-          let sHeight = elem.offsetTop;
-          elem.parentElement.scrollTo(0, sHeight);
-        }
-      });
+      this.food.scrollToElement(lous[i], 300);
+      // lous.forEach((elem, index) => {
+      //   if (i == index) {
+      //     let sHeight = elem.offsetTop;
+      //     // elem.parentElement.style.transform = `translateY(-${sHeight}px)`;
+      //   }
+      // });
     },
     // 滚动
     handleScroll(e) {
