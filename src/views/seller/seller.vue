@@ -52,7 +52,7 @@
         </ul>
       </div>
       <p class="seller-title">顾客留照</p>
-      <div class="swiper-imgs">
+      <div ref="imgs" class="swiper-imgs">
         <div
           :style="{ width: imgs.length * 120 + (imgs.length - 1) * 12 + 'px' }"
           class="swiper-container"
@@ -146,6 +146,7 @@ export default {
     this.seller = { ...sellerData() }; //模拟获取后台数据
     this.$nextTick(() => {
       new BScroll(this.$refs.wrapper, { click: true });
+      new BScroll(this.$refs.imgs, { click: true, scrollX: true });
     });
   },
   components: {

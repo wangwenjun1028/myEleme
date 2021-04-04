@@ -16,7 +16,9 @@
       </li>
     </ul>
     <div class="details">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -65,6 +67,16 @@ export default {
       });
       this.tabList = list;
     },
+  },
+  mounted() {
+    let route = this.$route.path;
+    this.tabList.forEach((elem) => {
+      if (elem.path == route) {
+        elem.currentSelect = true;
+      } else {
+        elem.currentSelect = false;
+      }
+    });
   },
   created() {
     this.dataSource = data;

@@ -63,6 +63,20 @@
         </ul>
       </div>
     </transition>
+
+    <div class="ball-container">
+      <div v-for="(ball, index) of balls" :key="index">
+        <transition
+          @before-enter="beforeEnter"
+          @enter="enter"
+          @after-enter="afterEnter"
+        >
+          <div v-show="ball.show" class="ball">
+            <div class="inner-ball"></div>
+          </div>
+        </transition>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -72,6 +86,24 @@ export default {
     return {
       shoppingList: [], //购物车数据
       isShowShoppingList: false, //是否显示购物车列表
+      balls: [
+        {
+          show: false,
+        },
+        {
+          show: false,
+        },
+        {
+          show: false,
+        },
+        {
+          show: false,
+        },
+        {
+          show: false,
+        },
+      ],
+      dropBalls: [],
     };
   },
   mounted() {},
@@ -126,6 +158,51 @@ export default {
     doClear() {
       this.isShowShoppingList = !this.isShowShoppingList;
       this.$emit("clearAllCount");
+    },
+    drop(target) {
+      for (var i = 0; i < this.balls.length; i++) {
+        let ball = this.balls[i];
+        if (!ball.show) {
+          ball.show = true;
+          ball.el = target;
+          this.dropBalls.push(ball);
+          return;
+        }
+      }
+    },
+    beforeEnter(el) {
+      let count = this.balls.length;
+      while (count--) {
+        let ball = this.balls[count];
+        if (ball.show) {
+          let rect = ball.el.getBoundingClientRect();
+          let x = rect.left - 32;
+          let y = -(window.innerHeight - rect.top - 22);
+          el.style.display = "";
+          el.style.webkitTransform = `translate3d(0,${y}px,0)`;
+          el.style.transform = `translate3d(0,${y}px,0)`;
+          let inner = el.getElementsByClassName("inner-ball")[0];
+          inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
+          inner.style.transform = `translate3d(${x}px,0,0)`;
+        }
+      }
+      // el.style.
+    },
+    enter(el) {
+      this.$nextTick(() => {
+        el.style.webkitTransform = "translate3d(0,0,0)";
+        el.style.transform = "translate3d(0,0,0)";
+        let inner = el.getElementsByClassName("inner-ball")[0];
+        inner.style.webkitTransform = "translate3d(0,0,0)";
+        inner.style.transform = "translate3d(0,0,0)";
+      });
+    },
+    afterEnter(el) {
+      let ball = this.dropBalls.shift();
+      if (ball) {
+        ball.show = false;
+        el.style.display = "none";
+      }
     },
   },
 };
@@ -334,6 +411,22 @@ export default {
   }
   .item-btn {
     margin-right: 4px;
+  }
+}
+.ball-container {
+  .ball {
+    position: fixed;
+    left: 32px;
+    bottom: 22px;
+    z-index: 200;
+    transition: all 0.6s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+  }
+  .inner-ball {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgb(0, 160, 220);
+    transition: all 0.4s linear;
   }
 }
 </style>

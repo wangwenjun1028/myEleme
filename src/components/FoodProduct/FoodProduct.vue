@@ -26,7 +26,10 @@
         ></span>
       </transition>
       <span v-if="foodInfo.count > 0" class="count">{{ foodInfo.count }}</span>
-      <span @click.stop="handleAdd" class="iconfont add-icon icon"></span>
+      <span
+        @click.stop="handleAdd($event)"
+        class="iconfont add-icon icon"
+      ></span>
     </div>
   </div>
 </template>
@@ -49,11 +52,12 @@ export default {
   },
   props: ["foodInfo"],
   methods: {
-    handleAdd() {
+    handleAdd(e) {
       //点击添加console.log(this.count)
       this.count++;
       // this.props.count = count;
       this.$emit("addCount", this.foodInfo.sid, this.count);
+      this.$emit("ballClick", e.target);
     },
     handleDecreace() {
       //点击减少

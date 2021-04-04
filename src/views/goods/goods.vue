@@ -24,6 +24,7 @@
               <food-product
                 :foodInfo="item"
                 @addCount="handleAddCount"
+                @ballClick="handleBallClick"
               ></food-product>
             </li>
           </ul>
@@ -36,6 +37,7 @@
         :dataList="dataList"
         @changeCount="handleChangeCount"
         @clearAllCount="handleClearAllCount"
+        ref="shoppingComponent"
       ></shopping>
     </div>
 
@@ -210,6 +212,11 @@ export default {
     // 食物详情页，点击返回
     handleHideFoodDetail() {
       this.isFoodDetailsShow = false;
+    },
+
+    // 购物车动效
+    handleBallClick(target) {
+      this.$refs.shoppingComponent.drop(target);
     },
   },
 };
